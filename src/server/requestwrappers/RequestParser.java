@@ -1,7 +1,7 @@
 package server.requestwrappers;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 public class RequestParser {
@@ -11,7 +11,7 @@ public class RequestParser {
     public static NetworkRequest parseRequest(String request) {
         JsonObject json;
         try {
-            json = new JsonParser().parse(request).getAsJsonObject();
+            json = new Gson().fromJson(request, JsonObject.class);
         } catch (JsonSyntaxException e) {
             throw new JsonSyntaxException("Request is not valid json");
         }

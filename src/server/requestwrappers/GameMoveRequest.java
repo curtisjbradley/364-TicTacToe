@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import server.Game;
 import server.GameManager;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class GameMoveRequest extends NetworkRequest {
@@ -28,24 +29,24 @@ public class GameMoveRequest extends NetworkRequest {
 
     @Override
     public String execute() {
-        Game g = GameManager.getInstance().getGame(gameId);
+        Game g = GameManager.getInstance().getGame(getGameID());
         if(g == null){
             throw new IllegalArgumentException("Game does not exist");
         }
         String currentPlayer = g.isPlayer1Turn() ? g.getPlayer1() : g.getPlayer2();
 
-        if(currentPlayer != getUsername()){
+        if(!Objects.equals(currentPlayer, getUsername())){
             throw new IllegalArgumentException("It is not your turn to move");
         }
-        if (position < 0 || position > 8) {
+        if (getPosition() < 0 || getPosition() > 8) {
             throw new IllegalArgumentException("Position must be between 0 and 8");
         }
-        if(g.getBoard()[position] != Game.Symbol.NONE) {
+        if(g.getBoard()[getPosition()] != Game.Symbol.NONE) {
             throw new IllegalArgumentException("Space is already occupied");
         }
 
         Game.Symbol symbol = g.isPlayer1Turn() ? Game.Symbol.X : Game.Symbol.O;
-        g.getBoard()[position] = symbol;
+        g.getBoard()[getPosition()] = symbol;
         g.setPlayer1Turn(!g.isPlayer1Turn());
         JsonObject jo = new JsonObject();
         jo.addProperty("status", "ok");

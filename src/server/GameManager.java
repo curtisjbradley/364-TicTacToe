@@ -13,7 +13,7 @@ public class GameManager {
     }
     private GameManager() {}
 
-    private ArrayList<Game> games = new ArrayList<>();
+    private final ArrayList<Game> games = new ArrayList<>();
 
 
     public ArrayList<Game> getGames() {
@@ -26,8 +26,6 @@ public class GameManager {
         return game;
     }
     public Game getGame(UUID id) {
-       return games.stream().filter(game -> {
-            return game.getId().equals(id);
-        }).findFirst().orElse(null);
+       return games.stream().filter(game -> game.getId().equals(id)).findFirst().orElse(null);
     }
 }

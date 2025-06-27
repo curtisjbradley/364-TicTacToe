@@ -15,7 +15,7 @@ public class RequestHandler {
     public void handle(){
         String request;
         try {
-            BufferedReader br = new BufferedReader( new InputStreamReader(socket.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             request = br.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -25,7 +25,7 @@ public class RequestHandler {
             return;
         }
         System.out.println("Received request: " + request);
-        String output = "";
+        String output;
 
         try {
         NetworkRequest wrappedRequest = RequestParser.parseRequest(request);
