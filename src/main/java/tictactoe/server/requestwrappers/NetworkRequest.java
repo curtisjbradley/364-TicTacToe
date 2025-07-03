@@ -1,4 +1,4 @@
-package server.requestwrappers;
+package tictactoe.server.requestwrappers;
 
 public abstract class NetworkRequest {
     private String username;

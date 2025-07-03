@@ -1,4 +1,4 @@
-package server;
+package tictactoe.server;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,6 +14,7 @@ public class ScoreboardManager {
     private ScoreboardManager() {}
 
     private HashMap<String, Integer> scores = new HashMap<String, Integer>();
+
     public int getScore(String player) {
         if (scores.containsKey(player)) {
             return scores.get(player);

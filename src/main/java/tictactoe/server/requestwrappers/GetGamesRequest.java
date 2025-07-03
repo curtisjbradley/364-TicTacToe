@@ -1,8 +1,8 @@
-package server.requestwrappers;
+package tictactoe.server.requestwrappers;
 
+import tictactoe.server.GameManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import server.GameManager;
 
 public class GetGamesRequest extends NetworkRequest {
     public GetGamesRequest(String username) {

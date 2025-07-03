@@ -1,4 +1,4 @@
-package server;
+package tictactoe.server;
 
 import com.google.gson.JsonObject;
 

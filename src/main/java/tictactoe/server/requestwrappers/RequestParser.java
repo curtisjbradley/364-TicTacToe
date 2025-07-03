@@ -1,4 +1,4 @@
-package server.requestwrappers;
+package tictactoe.server.requestwrappers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

@@ -1,6 +1,6 @@
-package server;
+package tictactoe.server;
 
-import common.Common;
+import tictactoe.common.Common;
 
 import java.io.IOException;
 import java.net.ServerSocket;

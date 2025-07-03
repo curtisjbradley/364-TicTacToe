@@ -1,7 +1,7 @@
-package server.requestwrappers;
+package tictactoe.server.requestwrappers;
 
 import com.google.gson.JsonObject;
-import server.ScoreboardManager;
+import tictactoe.server.ScoreboardManager;
 
 public class ScoreboardRequest extends NetworkRequest {
     public ScoreboardRequest(String username) {

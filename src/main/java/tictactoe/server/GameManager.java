@@ -1,4 +1,4 @@
-package server;
+package tictactoe.server;
 
 import java.util.ArrayList;
 import java.util.UUID;

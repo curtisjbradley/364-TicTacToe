@@ -1,8 +1,8 @@
-package server;
+package tictactoe.server;
 
 import com.google.gson.JsonObject;
-import server.requestwrappers.NetworkRequest;
-import server.requestwrappers.RequestParser;
+import tictactoe.server.requestwrappers.NetworkRequest;
+import tictactoe.server.requestwrappers.RequestParser;
 
 import java.io.*;
 import java.net.Socket;
