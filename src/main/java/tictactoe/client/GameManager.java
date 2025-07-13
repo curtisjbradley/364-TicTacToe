@@ -48,7 +48,6 @@ public class GameManager {
 
     }
     public void setGames(List<Game> games) {
-        System.out.println("setting games");
         this.games.clear();
         games.forEach(game -> this.games.put(game.getId(), game));
     }

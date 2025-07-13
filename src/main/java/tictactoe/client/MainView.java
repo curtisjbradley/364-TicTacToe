@@ -135,7 +135,6 @@ public class MainView extends JPanel {
             }
             JPanel scorePanel = new JPanel();
             scores.entrySet().stream().sorted((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue())).forEach((entry) -> {
-                System.out.println(entry.getKey() + " -" + entry.getValue());
                 JLabel score = new JLabel( entry.getKey() + " - " + entry.getValue());
                 score.setAlignmentX(JLabel.CENTER_ALIGNMENT);
                 scorePanel.add(score);
