@@ -9,10 +9,10 @@ public class ScoreboardRequest extends NetworkRequest {
     }
 
     @Override
-    public String execute() {
-        JsonObject jo =new JsonObject();
+    public JsonObject execute() {
+        JsonObject jo = new JsonObject();
         jo.addProperty("status", "ok");
         jo.add("scores" , ScoreboardManager.getInstance().serializeScores());
-        return jo.toString();
+        return jo;
     }
 }

@@ -1,7 +1,8 @@
 package tictactoe.server.requestwrappers;
 
 import com.google.gson.JsonObject;
-import tictactoe.server.Game;
+import tictactoe.common.Game;
+import tictactoe.server.ConnectionManager;
 import tictactoe.server.GameManager;
 
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class GameMoveRequest extends NetworkRequest {
     }
 
     @Override
-    public String execute() {
+    public JsonObject execute() {
         Game g = GameManager.getInstance().getGame(getGameID());
         if(g == null){
             throw new IllegalArgumentException("Game does not exist");
@@ -48,8 +49,21 @@ public class GameMoveRequest extends NetworkRequest {
         Game.Symbol symbol = g.isPlayer1Turn() ? Game.Symbol.X : Game.Symbol.O;
         g.getBoard()[getPosition()] = symbol;
         g.setPlayer1Turn(!g.isPlayer1Turn());
+
+        String opponent = getUsername().equals(g.getPlayer1()) ? g.getPlayer2() : g.getPlayer1();
+        JsonObject update = new JsonObject();
+        update.addProperty("status", "update");
+        update.add("game", g.serialize());
+
+        try {
+            ConnectionManager.getInstance().getConnection(opponent).sendMessage(update);
+        } catch(Exception e) {
+            System.out.println("Could not send update to other player");
+        }
+
         JsonObject jo = new JsonObject();
         jo.addProperty("status", "ok");
-        return jo.toString();
+        jo.add("game", g.serialize());
+        return jo;
     }
 }

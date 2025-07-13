@@ -20,7 +20,13 @@ public class Main {
     }
 
     private static void handleConnection(Socket connection) {
-        new Thread(() -> new RequestHandler(connection).handle()).start();
+        new Thread(() -> {
+            try {
+                new Connection(connection).initializeConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
 

@@ -1,7 +1,9 @@
 package tictactoe.server.requestwrappers;
 
+import com.google.gson.JsonObject;
+
 public abstract class NetworkRequest {
-    private String username;
+    private final String username;
     public NetworkRequest(String username) {
         this.username = username;
     }
@@ -9,5 +11,5 @@ public abstract class NetworkRequest {
         return username;
     }
 
-    public abstract String execute();
+    public abstract JsonObject execute();
 }

@@ -1,11 +1,11 @@
 package tictactoe.server.requestwrappers;
 
 import com.google.gson.JsonObject;
-import tictactoe.server.Game;
+import tictactoe.common.Game;
 import tictactoe.server.GameManager;
 
 public class NewGameRequest extends NetworkRequest {
-    private String challengedPlayer;
+    private final String challengedPlayer;
     public NewGameRequest(String username, String challengedPlayer) {
         super(username);
         this.challengedPlayer =challengedPlayer;
@@ -16,11 +16,11 @@ public class NewGameRequest extends NetworkRequest {
     }
 
     @Override
-    public String execute() {
+    public JsonObject execute() {
         Game g = GameManager.getInstance().createGame(getUsername(), getChallengedPlayer());
         JsonObject obj = new JsonObject();
         obj.addProperty("id",  g.getId().toString());
         obj.addProperty("status", "ok");
-        return obj.toString();
+        return obj;
     }
 }

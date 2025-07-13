@@ -1,5 +1,7 @@
 package tictactoe.server;
 
+import tictactoe.common.Game;
+
 import java.util.ArrayList;
 import java.util.UUID;
 

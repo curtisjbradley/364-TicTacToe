@@ -14,6 +14,18 @@ An unsuccessful request has a status of `error`, and has an error message in the
 ---
 ## Types of Requests
 
+### Connect
+
+`request-type: connect`
+
+Connect to the server. This must be sent immediately after connecting.
+
+**Required Fields:**
+- `username`: Username of the person making the request.
+
+**Response**
+- `status` -`ok` on success, `error` on error.
+---
 
 ### Scoreboard
 
@@ -45,6 +57,23 @@ Creates an instance of a new game.
 **Response**
 - `status` -`ok` on success, `error` on error.
 - `id` - UUID of the new game.
+
+---
+
+### Get Game
+
+`request-type: game`
+
+Get info about a game.
+
+**Required Fields:**
+- `username`: Username of user making the request.
+- `id`: UUID of the game
+
+**Response**
+- `status` -`ok` on success, `error` on error.
+- `game` - Game object containing `player1`, `player2`, `isPlayer1Turn`, `board`.
+    Where board is a json object with keys 0-8, and values of `X`, `O`, or `NONE`.
 
 ---
 ### Get Games
