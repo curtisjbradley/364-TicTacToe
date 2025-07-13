@@ -2,7 +2,9 @@ package tictactoe.common;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class Game {
@@ -49,7 +51,10 @@ public class Game {
         isPlayer1Turn = player1Turn;
     }
     public boolean hasEnded() {
-        return false;
+
+        if(getWinner() != null) return true;
+        return Arrays.stream(board)
+                .filter(s -> s == Symbol.NONE).findFirst().orElse(null) == null;
     }
 
     public UUID getId() {
@@ -85,5 +90,41 @@ public class Game {
         } catch (Exception e){
             throw new IllegalArgumentException("Bad serialised game.",e);
         }
+    }
+
+    public String getWinner() {
+        if (checkWinner(Symbol.X)) {
+            return getPlayer1();
+        }
+        if (checkWinner(Symbol.O)) {
+            return getPlayer2();
+        }
+        return null;
+    }
+
+    private boolean checkWinner(Symbol symbol) {
+        ArrayList<Integer> indicies = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            if (board[i] == symbol) {
+                indicies.add(i);
+            }
+        }
+        return checkIndicies(indicies, new int[]{0,1,2}) ||
+                checkIndicies(indicies, new int[]{3,4,5}) ||
+                checkIndicies(indicies, new int[]{6,7,8}) ||
+                checkIndicies(indicies, new int[]{0,3,6}) ||
+                checkIndicies(indicies, new int[]{1,4,7}) ||
+                checkIndicies(indicies, new int[]{2,5,8}) ||
+                checkIndicies(indicies, new int[]{0,4,8}) ||
+                checkIndicies(indicies, new int[]{2,4,6});
+
+    }
+    private boolean checkIndicies(List<Integer> from, int[] toFind){
+        for (int entry : toFind) {
+            if (!from.contains(entry)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

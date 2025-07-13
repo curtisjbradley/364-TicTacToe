@@ -8,11 +8,15 @@ import tictactoe.common.Game;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
 public class ClientConnection {
+
+    public interface ReceivedResponseSAM {
+        void receivedResponse(JsonObject response) throws IOException;
+    }
+
     private final String username;
     private Socket socket = null;
     private final HashMap<Integer, ReceivedResponseSAM> responseHandlers = new HashMap<>();
@@ -143,9 +147,20 @@ public class ClientConnection {
         }
     }
     public void getGames(ReceivedResponseSAM responseHandler) {
-        System.out.println("requesting games");
         JsonObject gameInfoRequest = new JsonObject();
         gameInfoRequest.addProperty("request-type", "getgames");
+        gameInfoRequest.addProperty("username", username);
+        try {
+            sendMessage(gameInfoRequest, responseHandler);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    public void getScoreboard(ReceivedResponseSAM responseHandler) {
+        JsonObject gameInfoRequest = new JsonObject();
+        gameInfoRequest.addProperty("request-type", "scoreboard");
         gameInfoRequest.addProperty("username", username);
         try {
             sendMessage(gameInfoRequest, responseHandler);

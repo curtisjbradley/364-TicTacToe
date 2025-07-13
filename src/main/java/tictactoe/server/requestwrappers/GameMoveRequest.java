@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import tictactoe.common.Game;
 import tictactoe.server.ConnectionManager;
 import tictactoe.server.GameManager;
+import tictactoe.server.ScoreboardManager;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -60,7 +61,14 @@ public class GameMoveRequest extends NetworkRequest {
         } catch(Exception e) {
             System.out.println("Could not send update to other player");
         }
-
+        if (g.hasEnded()) {
+            if(g.getWinner() != null) {
+                ScoreboardManager.getInstance().addScore(g.getWinner(),2);
+            } else {
+                ScoreboardManager.getInstance().addScore(g.getPlayer1(),1);
+                ScoreboardManager.getInstance().addScore(g.getPlayer2(),1);
+            }
+        }
         JsonObject jo = new JsonObject();
         jo.addProperty("status", "ok");
         jo.add("game", g.serialize());

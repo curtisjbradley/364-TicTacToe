@@ -8,10 +8,14 @@ import java.util.UUID;
 
 public class GameView extends JPanel {
 
+    public interface MoveHandlerSAM {
+        void playMove(int location);
+    }
+
     public static GameView instance;
-    private final MoveHandler handler;
+    private final MoveHandlerSAM handler;
     private final UUID gameUUID;
-    public GameView(UUID game, MoveHandler moveHandler) {
+    public GameView(UUID game, MoveHandlerSAM moveHandler) {
         this.instance = this;
         this.handler = moveHandler;
         this.gameUUID = game;
@@ -32,7 +36,7 @@ public class GameView extends JPanel {
             final int finalLoc = i;
             button.addActionListener(e -> handler.playMove(finalLoc));
             String playerToPlay = game.isPlayer1Turn() ? game.getPlayer1() : game.getPlayer2();
-            button.setEnabled(ClientConnection.getInstance().getUsername().equals(playerToPlay)
+            button.setEnabled(!game.hasEnded() && ClientConnection.getInstance().getUsername().equals(playerToPlay)
                     && s ==  Game.Symbol.NONE);
             this.add(button);
         }

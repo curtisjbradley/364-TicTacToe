@@ -1,11 +1,15 @@
 package tictactoe.client;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import tictactoe.common.Game;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class MainView extends JPanel {
     JFrame frame;
@@ -28,7 +32,10 @@ public class MainView extends JPanel {
         JMenuItem showGamesButton = new JMenuItem("Open Game");
         showGamesButton.addActionListener(e -> showGames());
         menuBar.add(showGamesButton);
-        menuBar.add(new JMenuItem("Scoreboard"));
+        JMenuItem scoreboardButton = new JMenuItem("Scoreboard");
+        scoreboardButton.addActionListener(e -> showScoreboard());
+        menuBar.add(scoreboardButton);
+
     }
 
     public void showNewGame(){
@@ -56,7 +63,7 @@ public class MainView extends JPanel {
                     playButton.setEnabled(false);
                     ClientConnection.getInstance().sendNewGameRequest(oppField.getText(), (output) -> {
                         if (output.get("status").getAsString().equals("ok")) {
-                            if (output.has("id")) {
+                            if (!output.has("id")) {
                                 JOptionPane.showMessageDialog(frame, "Error creating new game");
                             } else {
                                 UUID uuid = UUID.fromString(output.get("id").getAsString());
@@ -103,6 +110,7 @@ public class MainView extends JPanel {
         frame.add(new JLabel("Games:"));
         for (Game game : games) {
             if (game == null) continue;
+            if(game.hasEnded()) continue;
             JPanel gameInstance = new JPanel();
             gameInstance.add(new JLabel(game.getPlayer1() + " vs. " + game.getPlayer2()));
             JButton playButton = new JButton("Play");
@@ -112,5 +120,31 @@ public class MainView extends JPanel {
         }
         frame.pack();
 
+    }
+
+    public void showScoreboard() {
+        ClientConnection.getInstance().getScoreboard((response) -> {
+            if(response.has("error")) {
+                System.out.println("Error retrieving scoreboard");
+                return;
+            }
+            HashMap<String,Integer> scores = new HashMap<>();
+            for (JsonObject score : response.get("scores").getAsJsonArray().asList().stream().map(JsonElement::getAsJsonObject).collect(Collectors
+                    .toList())) {
+                scores.put(score.get("player").getAsString(), score.get("score").getAsInt());
+            }
+            JPanel scorePanel = new JPanel();
+            scores.entrySet().stream().sorted((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue())).forEach((entry) -> {
+                System.out.println(entry.getKey() + " -" + entry.getValue());
+                JLabel score = new JLabel( entry.getKey() + " - " + entry.getValue());
+                score.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+                scorePanel.add(score);
+            });
+            scorePanel.setLayout(new BoxLayout(scorePanel,BoxLayout.Y_AXIS));
+            frame.getContentPane().removeAll();
+            frame.add(new JLabel("Scoreboard"));
+            frame.add(new JScrollPane(scorePanel));
+            frame.pack();
+        });
     }
 }

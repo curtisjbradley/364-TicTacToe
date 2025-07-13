@@ -27,14 +27,24 @@ public class GameManager {
     }
     public void updateGame(Game game) {
         games.put(game.getId(), game);
-
+        if (game.hasEnded()) {
+            if(game.getWinner() != null) {
+                String loser = game.getWinner().equals(game.getPlayer1()) ? game.getPlayer2() : game.getPlayer1();
+                JOptionPane.showMessageDialog(Main.getFrame(), "Game has ended. " + game.getWinner() + " has beaten " + loser);
+            } else {
+                JOptionPane.showMessageDialog(Main.getFrame(), "Game has ended. " + game.getPlayer1() + " vs. " + game.getPlayer2() +" is a draw.");
+            }
+            games.remove(game.getId());
+        } else if(GameView.instance == null ||  !GameView.instance.isVisible() || !GameView.instance.getGameUUID().equals(game.getId())) {
+            JOptionPane.showMessageDialog(Main.getFrame(),"Game update in " + game.getPlayer1() + " vs. " + game.getPlayer2(), "Game Update", JOptionPane.INFORMATION_MESSAGE);
+        }
+        if(GameView.instance == null) {
+            return;
+        }
         if (GameView.instance.getGameUUID().equals(game.getId())){
             GameView.instance.update();
         }
-        if(GameView.instance == null ||  !GameView.instance.isVisible() || !GameView.instance.getGameUUID().equals(game.getId())) {
-            JOptionPane.showMessageDialog(Main.getFrame(),"Game update");
 
-        }
 
     }
     public void setGames(List<Game> games) {
